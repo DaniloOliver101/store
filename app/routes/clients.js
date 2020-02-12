@@ -1,17 +1,12 @@
-var mysql = require('mysql');
-var db = require('../../config/db');
-const conn = mysql.createConnection({
-    host: db.hostname,
-    user: db.username,
-    password: db.password,
-    database: db.db_name
-});
-conn.query("select * from clients", function(error, result){
+module.exports = function (application) {
 
-});
+    application.get('/clients', function (req, res) {
+        const dbConn = application.config.dbConn();
+        var clientsModel = application.app.models.clientsModel;
 
-module.exports = function(app){
-    app.get("/clients", function(req, res){
-        res.render("clients/clients");
+
+        clientsModel.getClients(dbConn, function (err, result) {
+            res.render("clients/clients", {clients: result});
+        });
     });
 };
