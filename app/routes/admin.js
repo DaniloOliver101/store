@@ -5,9 +5,9 @@ module.exports = function (application) {
     });
     application.post('/clients/save', function (req, res) {
         const dbConn = application.config.dbConn();
-        const clientsModel = application.app.models.clientsModel;
+        const clientsDAO = new application.app.models.ClientsDAO(dbConn);
         let client = req.body;
-        clientsModel.saveClient(dbConn, client, function(error, result){
+        clientsDAO.saveClient(client, function(error, result){
             res.redirect('/clients');
         });
         // res.send(client);
